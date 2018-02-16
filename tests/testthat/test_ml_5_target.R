@@ -1,7 +1,7 @@
-context("ml_4_target")
+context("ml_5_target")
 
 test_that("target as character", {
-  expect_equal(ml_target(list(.train = iris[1:3, ]), target = "Species"),
+  expect_equal(ml_5_target(list(.train = iris[1:3, ]), target = "Species"),
                structure(
                  list(
                    .train = structure(

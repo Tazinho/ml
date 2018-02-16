@@ -19,13 +19,13 @@
 #' @keywords utilities
 #'
 #' @examples
-#' ml_features(data_sets_list = list(.train = iris), target = c("Petal.Width"))
+#' ml_5_target(data_sets_list = list(.train = iris), target = c("Petal.Width"))
 #'
 #' @seealso \href{https://github.com/Tazinho/ml}{ml on github}.
 #'
 #' @export
 #'
-ml_4_target <- function(data_sets_list, target){
+ml_5_target <- function(data_sets_list, target){
   # checks
   
   # prepare output

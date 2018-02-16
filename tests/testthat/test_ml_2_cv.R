@@ -2,7 +2,7 @@ context("ml_2_cv")
 
 test_that(
   "folds = 1",{
-    expect_equal(ml_cv(list(.train = iris[1:5, ]), folds = 2, seed = 42),
+    expect_equal(ml_2_cv(list(.train = iris[1:5, ]), folds = 2, seed = 42),
                  structure(
                    list(
                      .train = structure(

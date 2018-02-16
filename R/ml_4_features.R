@@ -18,13 +18,13 @@
 #' @keywords utilities
 #'
 #' @examples
-#' ml_features(data_sets_list = list(.train = iris), features = c("Sepal.Length", "Sepal.Width"))
+#' ml_4_features(data_sets_list = list(.train = iris), features = c("Sepal.Length", "Sepal.Width"))
 #'
 #' @seealso \href{https://github.com/Tazinho/ml}{ml on github}.
 #'
 #' @export
 #'
-ml_3_features <- function(data_sets_list, features){
+ml_4_features <- function(data_sets_list, features){
   # checks: when not NULL each of train, test1, test2 has to have feature names inside
   
   # prepare outputs

@@ -1,7 +1,7 @@
-context("ml_3_features")
+context("ml_4_features")
 
 test_that("features as character", {
-  expect_equal(ml_features(
+  expect_equal(ml_4_features(
     list(.train = iris[1:3,]),
     features = c("Sepal.Length", "Sepal.Width")
   ),

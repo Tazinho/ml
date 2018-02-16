@@ -34,7 +34,7 @@
 #' @keywords utilities
 #'
 #' @examples
-#' ml_split(data = iris, train = c(T, F, F), test1 = c(F, T, F), test2 = c(F, F, T))
+#' ml_1_split(data = iris, train = c(T, F, F), test1 = c(F, T, F), test2 = c(F, F, T))
 #'
 #' @seealso \href{https://github.com/Tazinho/ml}{ml on github}.
 #'

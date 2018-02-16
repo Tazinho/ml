@@ -1,7 +1,7 @@
 context("ml_1_split")
 
 test_that("train-test1-test2-logical", {
-  expect_equal(ml_split(
+  expect_equal(ml_1_split(
     data = iris[1:9, ],
     train = c(T, F, F),
     test1 = c(F, T, F),

@@ -28,7 +28,7 @@
 #' @keywords utilities
 #'
 #' @examples
-#' ml_cv(data_sets_list = list(.train = iris), folds = 10)
+#' ml_2_cv(data_sets_list = list(.train = iris), folds = 10)
 #'
 #' @seealso \href{https://github.com/Tazinho/ml}{ml on github}.
 #'
