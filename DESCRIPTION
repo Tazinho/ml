@@ -6,3 +6,5 @@ Description: An experimental pkg to create a consistent but more intuitive ML fr
 Author: Malte Grosser <malte.grosser@gmail.com>
 Maintainer: Malte Grosser <malte.grosser@gmail.com>
 RoxygenNote: 6.0.1
+Suggests: testthat
+Encoding: UTF-8

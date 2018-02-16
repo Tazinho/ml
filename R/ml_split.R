@@ -45,7 +45,7 @@ ml_split <- function(data,
                      test1 = NULL, 
                      test2 = NULL, 
                      stratify = NULL,
-                     seed){
+                     seed = NULL){
   train_index <- train
   test1_index <- test1
   test2_index <- test2

@@ -5,7 +5,7 @@
 \title{Splitting datasets into training and test sets for machine learning}
 \usage{
 ml_split(data, train = NULL, test1 = NULL, test2 = NULL,
-  stratify = NULL, seed)
+  stratify = NULL, seed = NULL)
 }
 \arguments{
 \item{data}{A data frame}
