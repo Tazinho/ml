@@ -1,0 +1,7 @@
+Package: ml
+Version: 0.1
+Date: 2018-02-16
+Title: Machine Learning Experiments in R
+Description: An experimental pkg to create a consistent but more intuitive ML framework within R.
+Author: Malte Grosser <malte.grosser@gmail.com>
+Maintainer: Malte Grosser <malte.grosser@gmail.com>
