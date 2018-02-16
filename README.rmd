@@ -1,6 +1,5 @@
 ---
-title: "ml"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 Experimental pkg to create a consistent but more intuitive ML framework within R.
