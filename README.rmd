@@ -1,0 +1,12 @@
+---
+title: "ml"
+output: html_document
+---
+
+Experimental pkg to create a consistent but more intuitive ML framework within R.
+
+The main goal is to make all steps intuitive and let it **just work**
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics('./man/figures/models.PNG')
+```

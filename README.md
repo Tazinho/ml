@@ -1,2 +1,2 @@
 # ml
-Experimental pkg to create a consistent but more intuitive ml framework within R
+Experimental pkg to create a consistent but more intuitive ML framework within R.
