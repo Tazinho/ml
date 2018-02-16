@@ -40,7 +40,7 @@
 #'
 #' @export
 #'
-ml_split <- function(data, 
+ml_1_split <- function(data, 
                      train = NULL,
                      test1 = NULL, 
                      test2 = NULL, 

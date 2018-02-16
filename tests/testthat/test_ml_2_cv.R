@@ -1,4 +1,4 @@
-context("ml_cv")
+context("ml_2_cv")
 
 test_that(
   "folds = 1",{

@@ -34,7 +34,7 @@
 #'
 #' @export
 #'
-ml_cv <- function(data_sets_list, 
+ml_2_cv <- function(data_sets_list, 
                   folds,
                   stratify = NULL,
                   fixed = TRUE,

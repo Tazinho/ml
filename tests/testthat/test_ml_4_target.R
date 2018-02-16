@@ -1,4 +1,4 @@
-context("ml_features")
+context("ml_4_target")
 
 test_that("target as character", {
   expect_equal(ml_target(list(.train = iris[1:3, ]), target = "Species"),

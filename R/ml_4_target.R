@@ -25,7 +25,7 @@
 #'
 #' @export
 #'
-ml_target <- function(data_sets_list, target){
+ml_4_target <- function(data_sets_list, target){
   # checks
   
   # prepare output

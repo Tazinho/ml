@@ -24,7 +24,7 @@
 #'
 #' @export
 #'
-ml_features <- function(data_sets_list, features){
+ml_3_features <- function(data_sets_list, features){
   # checks: when not NULL each of train, test1, test2 has to have feature names inside
   
   # prepare outputs

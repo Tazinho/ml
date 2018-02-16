@@ -1,4 +1,4 @@
-context("ml_features")
+context("ml_3_features")
 
 test_that("features as character", {
   expect_equal(ml_features(

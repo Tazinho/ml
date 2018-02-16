@@ -1,4 +1,4 @@
-context("ml_split")
+context("ml_1_split")
 
 test_that("train-test1-test2-logical", {
   expect_equal(ml_split(
