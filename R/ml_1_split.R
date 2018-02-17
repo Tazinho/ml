@@ -5,7 +5,7 @@
 #' @param train This argument specifies the part of the \code{data}, which should
 #' be used to train a model. It can be provided as a percentage between 0 and 1,
 #' or an index. The index can be supplied as a logical, an integer or as an
-#' expression, which becomes evaluated in the data (for example a column of
+#' expression (the latter is not implemented yet.), which becomes evaluated in the data (for example a column of
 #' \code{data}). If \code{data} is NULL, a data frame must be supplied instead.
 #' 
 #' @param test1 This argument specifies the part of the \code{data}, which should
@@ -16,16 +16,16 @@
 #' be used to test a model, which was trained on \code{train} a second.time
 #' It can be supplied in the same way as \code{train} and \code{test1}
 #' 
-#' @param stratify The name of one or more columns in \code{data}. When
+#' @param stratify Not implemented yet. The name of one or more columns in \code{data}. When
 #' \code{train}, \code{test1} and \code{test2} are supplied, as percentages, 
 #' the resulting proportions of the supplied columns in the created training and
 #' test sets will be the same.
 #' 
-#' @param output A character vector specifying the output type. One can choose between
+#' @param output Not implemented yet. A character vector specifying the output type. One can choose between
 #' list, tibble, data.table and data.frame. Other formats like sparse matrices
 #' might be implemented in the future.
 #' 
-#' @param add Per default new splits by iterative calls will overwrite the first
+#' @param add Not implemented yet. Per default new splits by iterative calls will overwrite the first
 #' call. If you instead want to add an additional training-test split, set \code{add}
 #' to \code{TRUE}.
 #' 
@@ -48,7 +48,7 @@
 #'
 #' @export
 #'
-ml_1_split <- function(data, 
+ml_1_split <- function(data = NULL, 
                      train = NULL,
                      test1 = NULL, 
                      test2 = NULL, 
@@ -56,9 +56,96 @@ ml_1_split <- function(data,
                      output = "list",
                      add = FALSE,
                      seed = NULL){
-  train_index <- train
-  test1_index <- test1
-  test2_index <- test2
+  # train: percentage -> test1 and test2 must be NULL or also percentages
+  # if they are NULL, the rest of the others will be supplied to them
+  # if that doesn't add up to one.
+  # logical or integer index -> Is ok. Won't affekt the others.
+  # expression evaluated in the data -> implement that later
+
+  # different input cases:
+  # - data or not a data frame:
+  if(!is.data.frame(data) && !is.data.frame(train)){
+    stop("`data` or `train` must be a data frame")
+  }
+  
+  if (is.data.frame(train)){
+    if(!is.null(data)){
+      stop("When `train` is supplied as a data frame, `data` must be `NULL`.")
+    } else {
+      train_index <- 1:nrow(train)
+    }
+    
+    if(is.data.frame(test1)){test1_index <- (1:nrow(test1)) + nrow(train)}
+    if(is.data.frame(test2)){test2_index <- (1:nrow(test2)) + nrow(train) + nrow(test1)}
+    
+    if(!is.data.frame(test1) || !is.null(test1) || !is.data.frame(test2) || !is.null(test2)){
+      stop("When `train` is supplied as a data frame, the testsets muss also be data frames or `NULL`.")
+    }
+  } 
+  
+  # - data is a data frame
+  if(is.data.frame(data) && (is.data.frame(train) || is.data.frame(test1) || is.data.frame(test2))){
+    stop("When `data` is a data frame, `train`, `test1` and `test2` must not be data frames.")
+  }
+  
+  # - index is logical
+  if(is.logical(train)){
+    train_index <- train
+    test1_index <- if(is.logical(test1)){test1} else{NULL}
+    test2_index <- if(is.logical(test2)){test2} else{NULL}
+  }
+  
+  # - index is integer with length > 1
+  if(is.integer(train) && length(train) > 1 && (is.integer(test1) || is.null(test1) || is.integer(test2) || is.null(test2))){
+    train_index <- train
+    test1_index <- test1
+    test2_index <- test2
+  }
+  
+  # - index is length 1 integer
+  if(is.integer(train) && length(train) == 1 && train == 1L && (is.null(test1) || (is.integer(test1) && length(test1) == 1 && test1 == 0L)) && (is.null(test2) || (is.integer(test2) && length(test2) == 1 && test2 == 0))){
+    train_index <- train
+    test1_index <- NULL
+    test2_index <- NULL
+  }
+  
+  # - index is numeric double, länge1, größer null kleiner 1, dann auch noch test1 und test2
+  # und wenn die anderen jeweils double sind, muss auch noch die summe etwa 1 sein oder kleiner als 1.
+  # - default case (.6, .2, .2) im folgenden direkt mighandeln:
+  if(is.null(train) && is.null(test1) && is.null(test2)){
+    train <- 0.6
+    test1 <- 0.2
+    test2 <- 0.2
+  }
+  
+  if(!is.null(seed)){set.seed(seed)} # seed for the random sampling
+  
+  if(is.double(train) && length(train) == 1 && (train > 0 || isTRUE(all.equal(train, 0L))) && (train < 1 || isTRUE(all.equal(train, 1L))) && 
+     (is.null(test1) || (is.double(test1) && length(test1) == 1 && (test1 > 0 || isTRUE(all.equal(test1, 0L))) && (test1 < 1 || isTRUE(all.equal(test1, 1L))))) &&
+     (is.null(test2) || (is.double(test2) && length(test2) == 1 && (test2 > 0 || isTRUE(all.equal(test2, 0L))) && (test2 < 1 || isTRUE(all.equal(test2, 1L)))))
+  ){
+    # 1st case
+    
+    if(is.double(train) && is.double(test1) && is.double(test2) && isTRUE(all.equal(train + test1 + test2, 1L))){
+      train_index <- sample(nrow(data), train * nrow(data), replace = FALSE)
+      if(length(setdiff(1:nrow(data), train_index)) > 1){
+        test1_index <- sample(setdiff(1:nrow(data), train_index), test1 * nrow(data), replace = FALSE)
+      } else {
+          test1_index <- setdiff(1:nrow(data), train_index)
+        }
+      test2_index <- setdiff(1:nrow(data), c(train_index, test1_index))
+    } else {
+      # 2nd case
+      if(is.double(train) && is.double(test1) && train + test1 == 1){
+        train_index <- sample(nrow(data), train * nrow(data), replace = FALSE)
+        test1_index <- setdiff(1:nrow(data), c(train_index, test1_index))
+      } else {
+        # 3rd case
+        train_index <- sample(nrow(data), train * nrow(data), replace = FALSE)
+      }
+    }
+  }
+  # noch um maschinen genauigkeit kümmern...
   
   # prepare return
   train <- data[train_index, , drop = FALSE]

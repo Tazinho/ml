@@ -4,7 +4,7 @@
 \alias{ml_1_split}
 \title{Splitting datasets into training and test sets for machine learning}
 \usage{
-ml_1_split(data, train = NULL, test1 = NULL, test2 = NULL,
+ml_1_split(data = NULL, train = NULL, test1 = NULL, test2 = NULL,
   stratify = NULL, output = "list", add = FALSE, seed = NULL)
 }
 \arguments{
@@ -13,7 +13,7 @@ ml_1_split(data, train = NULL, test1 = NULL, test2 = NULL,
 \item{train}{This argument specifies the part of the \code{data}, which should
 be used to train a model. It can be provided as a percentage between 0 and 1,
 or an index. The index can be supplied as a logical, an integer or as an
-expression, which becomes evaluated in the data (for example a column of
+expression (the latter is not implemented yet.), which becomes evaluated in the data (for example a column of
 \code{data}). If \code{data} is NULL, a data frame must be supplied instead.}
 
 \item{test1}{This argument specifies the part of the \code{data}, which should
@@ -24,16 +24,16 @@ It can be supplied in the same way as \code{train}}
 be used to test a model, which was trained on \code{train} a second.time
 It can be supplied in the same way as \code{train} and \code{test1}}
 
-\item{stratify}{The name of one or more columns in \code{data}. When
+\item{stratify}{Not implemented yet. The name of one or more columns in \code{data}. When
 \code{train}, \code{test1} and \code{test2} are supplied, as percentages, 
 the resulting proportions of the supplied columns in the created training and
 test sets will be the same.}
 
-\item{output}{A character vector specifying the output type. One can choose between
+\item{output}{Not implemented yet. A character vector specifying the output type. One can choose between
 list, tibble, data.table and data.frame. Other formats like sparse matrices
 might be implemented in the future.}
 
-\item{add}{Per default new splits by iterative calls will overwrite the first
+\item{add}{Not implemented yet. Per default new splits by iterative calls will overwrite the first
 call. If you instead want to add an additional training-test split, set \code{add}
 to \code{TRUE}.}
 
