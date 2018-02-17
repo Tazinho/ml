@@ -2,7 +2,7 @@ context("ml_1_split")
 
 test_that("train-test1-test2-logical", {
   expect_equal(ml_1_split(
-    data = iris[1:9, ],
+    data = iris[1:9,],
     train = c(T, F, F),
     test1 = c(F, T, F),
     test2 = c(F, F, T)
@@ -96,7 +96,7 @@ test_that("train-test1-test2-logical", {
 test_that("train-test1-test2-percentage", {
   expect_equal(
     ml_1_split(
-      iris[1:10, ],
+      iris[1:10,],
       train = 0.2,
       test1 = 0.3,
       test2 = 0.5,
@@ -204,7 +204,7 @@ test_that(
 )
 
 test_that("no data but train supplied",
-          expect_equal(ml_1_split(train = iris[1:3, ]),
+          expect_equal(ml_1_split(train = iris[1:3,]),
                        structure(
                          list(
                            .train = structure(
@@ -265,7 +265,7 @@ test_that("data NULL but train data frame",
             ml_1_split(
               data = NULL,
               train = iris[1:3, , drop = FALSE],
-              test1 = iris[1:3,]
+              test1 = iris[1:3, ]
             ),
             structure(
               list(
@@ -338,7 +338,7 @@ test_that("data NULL and test2 data frame",
             ml_1_split(
               data = NULL,
               train = iris[1:3, , drop = FALSE],
-              test2 = iris[1:3, ]
+              test2 = iris[1:3,]
             ),
             structure(
               list(
@@ -445,9 +445,9 @@ test_that(
 test_that("data NULL training and test sets data frames",
           expect_equal(
             ml_1_split(
-              train = iris[1:2,],
-              test2 = iris[1:2,],
-              test1 = iris[1:2,]
+              train = iris[1:2, ],
+              test2 = iris[1:2, ],
+              test1 = iris[1:2, ]
             ),
             structure(
               list(
@@ -537,7 +537,7 @@ test_that("data NULL training and test sets data frames",
 test_that("train logical test1 logical test2 logical",
           expect_equal(
             ml_1_split(
-              data = iris[1:3, ],
+              data = iris[1:3,],
               train = c(T, F, F),
               test1 = c(F, T, F),
               test2 = c(F, F, T)
@@ -624,7 +624,7 @@ test_that("train logical test1 logical test2 logical",
 test_that(
   "data data frame train logical test1 NULL test2 NULL",
   expect_equal(ml_1_split(
-    data = iris[1:3, ], train = c(T, F, F)
+    data = iris[1:3,], train = c(T, F, F)
   ),
   structure(
     list(
@@ -707,7 +707,7 @@ test_that(
 
 test_that("data data frame train ingeger",
           expect_equal(ml_1_split(
-            data = iris[1:3,], train = c(1L, 2L, 3L)
+            data = iris[1:3, ], train = c(1L, 2L, 3L)
           ),
           structure(
             list(
@@ -790,7 +790,7 @@ test_that("data data frame train ingeger",
           )))
 
 test_that("data data frame train length one integer",
-          expect_equal(ml_1_split(data = iris[1:2, ], train = 1L),
+          expect_equal(ml_1_split(data = iris[1:2,], train = 1L),
                        structure(
                          list(
                            .train = structure(
@@ -872,7 +872,7 @@ test_that("data data frame train length one integer",
                        )))
 
 test_that("data data frame rest NULL",
-          expect_equal(ml_1_split(data = iris[1:5, ], seed = 42),
+          expect_equal(ml_1_split(data = iris[1:5,], seed = 42),
                        structure(
                          list(
                            .train = structure(
@@ -957,7 +957,7 @@ test_that(
   "data data frame train probability test1 probability",
   expect_equal(
     ml_1_split(
-      data = iris[1:3,],
+      data = iris[1:3, ],
       train = 0.66,
       test1 = 0.34,
       seed = 42
@@ -1048,7 +1048,7 @@ test_that(
   "data data frame train test1 test2 probability. Almost all data in train",
   expect_equal(
     ml_1_split(
-      data = iris[1:3, ],
+      data = iris[1:3,],
       train = 0.66,
       test1 = 0.17,
       test2 = 0.17,
@@ -1139,7 +1139,7 @@ test_that(
 test_that("data data frame train percentage rest NULL",
           expect_equal(
             ml_1_split(
-              data = iris[1:5,],
+              data = iris[1:5, ],
               train = 0.3,
               seed = 42
             ),
@@ -1222,3 +1222,98 @@ test_that("data data frame train percentage rest NULL",
               .Names = c(".train", ".test1", ".test2")
             )
           ))
+
+test_that("output tibble", expect_equal(
+  ml_1_split(iris[1:3, ], c(T, F, F), c(F, T, F), c(F, F, T), output = "tibble"),
+  structure(
+    list(
+      Sepal.Length = c(5.1, 4.9, 4.7),
+      Sepal.Width = c(3.5,
+                      3, 3.2),
+      Petal.Length = c(1.4, 1.4, 1.3),
+      Petal.Width = c(0.2,
+                      0.2, 0.2),
+      Species = structure(
+        c(1L, 1L, 1L),
+        .Label = c("setosa",
+                   "versicolor", "virginica"),
+        class = "factor"
+      ),
+      .set = c("train",
+               "test1", "test2")
+    ),
+    .Names = c(
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      ".set"
+    ),
+    row.names = c(NA,-3L),
+    class = c("tbl_df", "tbl", "data.frame")
+  )
+))
+
+test_that("output data.table", expect_equal(
+  ml_1_split(iris[1:3, ], c(T, F, F), c(F, T, F), c(F, F, T), output = "data.table"),
+  structure(
+    list(
+      Sepal.Length = c(5.1, 4.9, 4.7),
+      Sepal.Width = c(3.5,
+                      3, 3.2),
+      Petal.Length = c(1.4, 1.4, 1.3),
+      Petal.Width = c(0.2,
+                      0.2, 0.2),
+      Species = structure(
+        c(1L, 1L, 1L),
+        .Label = c("setosa",
+                   "versicolor", "virginica"),
+        class = "factor"
+      ),
+      .set = c("train",
+               "test1", "test2")
+    ),
+    .Names = c(
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      ".set"
+    ),
+    row.names = c(NA,-3L),
+    class = c("data.table", "data.frame")
+  )
+))
+test_that("output data.frame", expect_equal(
+  ml_1_split(iris[1:3, ], c(T, F, F), c(F, T, F), c(F, F, T), output = "data.frame"),
+  structure(
+    list(
+      Sepal.Length = c(5.1, 4.9, 4.7),
+      Sepal.Width = c(3.5,
+                      3, 3.2),
+      Petal.Length = c(1.4, 1.4, 1.3),
+      Petal.Width = c(0.2,
+                      0.2, 0.2),
+      Species = structure(
+        c(1L, 1L, 1L),
+        .Label = c("setosa",
+                   "versicolor", "virginica"),
+        class = "factor"
+      ),
+      .set = c("train",
+               "test1", "test2")
+    ),
+    class = "data.frame",
+    .Names = c(
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      ".set"
+    ),
+    row.names = c(NA,-3L)
+  )
+))

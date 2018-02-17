@@ -29,9 +29,10 @@ It can be supplied in the same way as \code{train} and \code{test1}}
 the resulting proportions of the supplied columns in the created training and
 test sets will be the same.}
 
-\item{output}{Not implemented yet. A character vector specifying the output type. One can choose between
-list, tibble, data.table and data.frame. Other formats like sparse matrices
-might be implemented in the future.}
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. If one chooses one of the three latter
+formats, the training / test information will be added as a column named .set.
+Other formats like sparse matrices might be implemented in the future.}
 
 \item{add}{Not implemented yet. Per default new splits by iterative calls will overwrite the first
 call. If you instead want to add an additional training-test split, set \code{add}

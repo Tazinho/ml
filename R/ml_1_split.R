@@ -21,9 +21,10 @@
 #' the resulting proportions of the supplied columns in the created training and
 #' test sets will be the same.
 #' 
-#' @param output Not implemented yet. A character vector specifying the output type. One can choose between
-#' list, tibble, data.table and data.frame. Other formats like sparse matrices
-#' might be implemented in the future.
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. If one chooses one of the three latter
+#' formats, the training / test information will be added as a column named .set.
+#' Other formats like sparse matrices might be implemented in the future.
 #' 
 #' @param add Not implemented yet. Per default new splits by iterative calls will overwrite the first
 #' call. If you instead want to add an additional training-test split, set \code{add}
@@ -166,5 +167,18 @@ ml_1_split <- function(data = NULL,
   test2 <- tibble::as_tibble(test2)
   
   # return
+  if(output == "list")
   return(list(.train = train, .test1 = test1, .test2 = test2))
+  
+  if(output != "list"){
+    .dataset <- dplyr::bind_rows(train, test1, test2)
+    .dataset[[".set"]] <- c(rep("train", nrow(train)), 
+                            rep("test1", nrow(test1)),
+                            rep("test2", nrow(test2)))
+  }
+  
+  if(output == "tibble"){return(.dataset)}
+  if(output == "data.table"){return(data.table::as.data.table(.dataset))}
+  if(output == "data.frame"){return(as.data.frame(.dataset))}
+  
 }
