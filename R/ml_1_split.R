@@ -59,6 +59,7 @@ ml_1_split <- function(data = NULL,
                      seed = NULL){
   # different input cases:
   # - data is not a data frame:
+  
   if(!is.data.frame(data) && !is.data.frame(train)){
     stop("`data` or `train` must be a data frame")
   }
@@ -135,7 +136,6 @@ ml_1_split <- function(data = NULL,
   if(!is.null(seed)){set.seed(seed)} # seed for the random sampling
   
   if(is.null(stratify)){
-  
   if(is.double(train) && length(train) == 1 && (train > 0 || isTRUE(all.equal(train, 0L))) && (train < 1 || isTRUE(all.equal(train, 1L))) && 
      (is.null(test1) || (is.double(test1) && length(test1) == 1 && (test1 > 0 || isTRUE(all.equal(test1, 0L))) && (test1 < 1 || isTRUE(all.equal(test1, 1L))))) &&
      (is.null(test2) || (is.double(test2) && length(test2) == 1 && (test2 > 0 || isTRUE(all.equal(test2, 0L))) && (test2 < 1 || isTRUE(all.equal(test2, 1L)))))
@@ -169,6 +169,10 @@ ml_1_split <- function(data = NULL,
   
   # stratification
   if(!is.null(stratify)){
+    
+    if(!is.character(stratify)){stop("`stratify` must contain a character with column names.")}
+    if(!all(stratify %in% names(data))){stop("`All elements of `stratify` must be column names of `data`.")}
+    
     # unique combinations
     strat <- data[stratify] %>% tibble::rownames_to_column(".index_data")
     strat2 <- unique(data[stratify]) %>% tibble::rownames_to_column(".index_combinations")

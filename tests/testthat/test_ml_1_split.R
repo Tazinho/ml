@@ -1624,3 +1624,13 @@ test_that(
     )
   )
 )
+
+test_that("stratify not character",
+          expect_error(ml_1_split(data = iris, train = .5, test1 = .5, stratify = 5),
+          "`stratify` must contain a character with column names.",
+          fixed = TRUE))
+
+test_that("stratify not character",
+          expect_error(ml_1_split(data = iris, train = .5, test1 = .5, stratify = "bla"),
+          "`All elements of `stratify` must be column names of `data`.",
+          fixed = TRUE))
