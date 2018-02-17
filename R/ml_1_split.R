@@ -16,7 +16,7 @@
 #' be used to test a model, which was trained on \code{train} a second.time
 #' It can be supplied in the same way as \code{train} and \code{test1}
 #' 
-#' @param stratify Not implemented yet. The name of one or more columns in \code{data}. When
+#' @param stratify The name of one or more columns in \code{data}. When
 #' \code{train}, \code{test1} and \code{test2} are supplied, as percentages, 
 #' the resulting proportions of the supplied columns in the created training and
 #' test sets will be the same.
@@ -57,12 +57,6 @@ ml_1_split <- function(data = NULL,
                      output = "list",
                      add = FALSE,
                      seed = NULL){
-  # train: percentage -> test1 and test2 must be NULL or also percentages
-  # if they are NULL, the rest of the others will be supplied to them
-  # if that doesn't add up to one.
-  # logical or integer index -> Is ok. Won't affekt the others.
-  # expression evaluated in the data -> implement that later
-
   # different input cases:
   # - data is not a data frame:
   if(!is.data.frame(data) && !is.data.frame(train)){
@@ -76,7 +70,7 @@ ml_1_split <- function(data = NULL,
       train_index <- 1:nrow(train)
     }
     
-    # test1 und 2 müssen entweder null oder data frame sein
+    # test1 and 2 have to be NULL or a data frame
     if(!(is.data.frame(test1) || is.null(test1)) || !(is.data.frame(test2) || is.null(test2))){
       stop("When `train` is supplied as a data frame, the testsets must also be data frames or `NULL`.")
     }
@@ -111,22 +105,42 @@ ml_1_split <- function(data = NULL,
     test2_index <- NULL
   }
   
-  # - index is numeric double, länge1, größer null kleiner 1, dann auch noch test1 und test2
-  # und wenn die anderen jeweils double sind, muss auch noch die summe etwa 1 sein oder kleiner als 1.
-  # - default case (.6, .2, .2) im folgenden direkt mighandeln:
+  # check that sum is always one
+  if(is.double(train) || is.double(test1) || is.double(test2)){
+    help1 <- train; help2 <- test1; help3 <- test2
+    if(is.null(help1)){help1 <- 0}
+    if(is.null(help2)){help2 <- 0}
+    if(is.null(help3)){help3 <- 0}
+    
+    if(!isTRUE(all.equal(help1 + help2 + help3, 1))){
+      stop("When `train` and / or `test1` and / or `test2` are supplied as doubles, they must be between 0 and 1 and add up to one.")
+    }
+    # if(help1 > 0 || isTRUE(all.equal(help1, 0)) && help2 > 0 || isTRUE(all.equal(help2, 0)) && help2 > 0 || isTRUE(all.equal(help2, 0))){
+    #   stop("When `train` and / or `test1` and / or `test2` are supplied as doubles, they must be between 0 and 1 and add up to one.")
+    # }
+    # if(help1 < 1 || isTRUE(all.equal(help1, 1)) && help2 < 1 || isTRUE(all.equal(help2, 1)) && help2 < 1 || isTRUE(all.equal(help2, 1))){
+    #   stop("When `train` and / or `test1` and / or `test2` are supplied as doubles, they must be between 0 and 1 and add up to one.")
+    # }
+  }
+  
+  # - index is numeric double, length1, greater null smaller 1, then also test1 and test2
+  # and when the others are doubles, also the sum has to be 1 or smaller 1.
+  # - default case (.6, .2, .2) in the following we can set this case to handle it directly
   if(is.null(train) && is.null(test1) && is.null(test2)){
     train <- 0.6
     test1 <- 0.2
     test2 <- 0.2
   }
-
+  
   if(!is.null(seed)){set.seed(seed)} # seed for the random sampling
+  
+  if(is.null(stratify)){
   
   if(is.double(train) && length(train) == 1 && (train > 0 || isTRUE(all.equal(train, 0L))) && (train < 1 || isTRUE(all.equal(train, 1L))) && 
      (is.null(test1) || (is.double(test1) && length(test1) == 1 && (test1 > 0 || isTRUE(all.equal(test1, 0L))) && (test1 < 1 || isTRUE(all.equal(test1, 1L))))) &&
      (is.null(test2) || (is.double(test2) && length(test2) == 1 && (test2 > 0 || isTRUE(all.equal(test2, 0L))) && (test2 < 1 || isTRUE(all.equal(test2, 1L)))))
   ){
-    # 1st case
+    # 1st case (all are supplied)
     
     if(is.double(train) && is.double(test1) && is.double(test2) && isTRUE(all.equal(train + test1 + test2, 1L))){
       train_index <- sample(nrow(data), ceiling(train * nrow(data)), replace = FALSE)
@@ -137,30 +151,77 @@ ml_1_split <- function(data = NULL,
         }
       test2_index <- setdiff(1:nrow(data), c(train_index, test1_index))
     } else {
-      # 2nd case
+      # 2nd case (1st and 2nd are supplied)
       if(is.double(train) && is.double(test1) && isTRUE(all.equal(train + test1, 1L))){
         train_index <- sample(nrow(data), ceiling(train * nrow(data)), replace = FALSE)
         test1_index <- setdiff(1:nrow(data), c(train_index))
         test2_index <- NULL
       } else {
-        # 3rd case
+        # 3rd case (1st is supplied)
         train_index <- sample(nrow(data), ceiling(train * nrow(data)), replace = FALSE)
         test1_index <- NULL
         test2_index <- NULL
       }
     }
   }
-  # noch um maschinen genauigkeit kümmern...
+    
+  }
+  
+  # stratification
+  if(!is.null(stratify)){
+    # unique combinations
+    strat <- data[stratify] %>% tibble::rownames_to_column(".index_data")
+    strat2 <- unique(data[stratify]) %>% tibble::rownames_to_column(".index_combinations")
+    # mapping kombination zu indizes im data frame
+    strat3 <- strat2 %>% 
+      dplyr::left_join(strat, by = stratify) %>%
+      `[`(c(".index_data", ".index_combinations"))
+    
+    strat4 <- strat3 %>% dplyr::group_by(".index_data") %>% 
+      dplyr::mutate(n = n()) %>% 
+      dplyr::ungroup()
+    # case 1 again
+    if(is.double(train) && is.double(test1) && is.double(test2) && isTRUE(all.equal(train + test1 + test2, 1L))){
+    
+      index <- strat4 %>% 
+        dplyr::mutate(.set = sample(c("train", "test1", "test2"), n(), T,
+                                    prob = c(train, test1, test2))) %>% 
+        dplyr::pull(.set)
+      
+      train_index <- index == "train"
+      test1_index <- index == "test1"
+      test2_index <- index == "test2"
+    } else {
+      # case 2 again
+      if(is.double(train) && is.double(test1) && isTRUE(all.equal(train + test1, 1L))){
+        index <- strat4 %>% 
+          dplyr::mutate(.set = sample(c("train", "test1"), n(), T,
+                                      prob = c(train, test1))) %>% 
+          dplyr::pull(.set)
+        
+        train_index <- index == "train"
+        test1_index <- index == "test1"
+        test2_index <- NULL
+        } else {
+          # case 3 again
+          index <- strat4 %>% 
+            dplyr::mutate(.set = sample(c("train"), n(), T,
+                                        prob = c(train))) %>% 
+            dplyr::pull(.set)
+          
+          train_index <- index == "train"
+          test1_index <- NULL
+          test2_index <- NULL
+        }
+    }
+  }
   
   # prepare return
   if(!is.null(data)){
   train <- data[train_index, , drop = FALSE]
   test1 <- data[test1_index, , drop = FALSE]
   test2 <- data[test2_index, , drop = FALSE]
-  } # else train, test1 und test2 bleibgen gleich
-  
-  # if(nrow(test1) == 0L){test1 <- NULL}
-  # if(nrow(test2) == 0L){test2 <- NULL}
+  }
   
   train <- tibble::as_tibble(train)
   test1 <- tibble::as_tibble(test1)

@@ -24,7 +24,7 @@ It can be supplied in the same way as \code{train}}
 be used to test a model, which was trained on \code{train} a second.time
 It can be supplied in the same way as \code{train} and \code{test1}}
 
-\item{stratify}{Not implemented yet. The name of one or more columns in \code{data}. When
+\item{stratify}{The name of one or more columns in \code{data}. When
 \code{train}, \code{test1} and \code{test2} are supplied, as percentages, 
 the resulting proportions of the supplied columns in the created training and
 test sets will be the same.}

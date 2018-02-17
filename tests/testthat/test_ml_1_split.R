@@ -1136,92 +1136,18 @@ test_that(
   )
 )
 
-test_that("data data frame train percentage rest NULL",
-          expect_equal(
-            ml_1_split(
-              data = iris[1:5, ],
-              train = 0.3,
-              seed = 42
-            ),
-            structure(
-              list(
-                .train = structure(
-                  list(
-                    Sepal.Length = c(5, 4.6),
-                    Sepal.Width = c(3.6, 3.1),
-                    Petal.Length = c(1.4, 1.5),
-                    Petal.Width = c(0.2,
-                                    0.2),
-                    Species = structure(
-                      c(1L, 1L),
-                      .Label = c("setosa", "versicolor",
-                                 "virginica"),
-                      class = "factor"
-                    )
-                  ),
-                  .Names = c(
-                    "Sepal.Length",
-                    "Sepal.Width",
-                    "Petal.Length",
-                    "Petal.Width",
-                    "Species"
-                  ),
-                  row.names = c(5L,
-                                4L),
-                  class = c("tbl_df", "tbl", "data.frame")
-                ),
-                .test1 = structure(
-                  list(
-                    Sepal.Length = numeric(0),
-                    Sepal.Width = numeric(0),
-                    Petal.Length = numeric(0),
-                    Petal.Width = numeric(0),
-                    Species = structure(
-                      integer(0),
-                      .Label = c("setosa",
-                                 "versicolor", "virginica"),
-                      class = "factor"
-                    )
-                  ),
-                  .Names = c(
-                    "Sepal.Length",
-                    "Sepal.Width",
-                    "Petal.Length",
-                    "Petal.Width",
-                    "Species"
-                  ),
-                  row.names = integer(0),
-                  class = c("tbl_df",
-                            "tbl", "data.frame")
-                ),
-                .test2 = structure(
-                  list(
-                    Sepal.Length = numeric(0),
-                    Sepal.Width = numeric(0),
-                    Petal.Length = numeric(0),
-                    Petal.Width = numeric(0),
-                    Species = structure(
-                      integer(0),
-                      .Label = c("setosa", "versicolor",
-                                 "virginica"),
-                      class = "factor"
-                    )
-                  ),
-                  .Names = c(
-                    "Sepal.Length",
-                    "Sepal.Width",
-                    "Petal.Length",
-                    "Petal.Width",
-                    "Species"
-                  ),
-                  row.names = integer(0),
-                  class = c("tbl_df",
-                            "tbl", "data.frame")
-                )
-              ),
-              .Names = c(".train", ".test1", ".test2")
-            )
-          ))
+test_that(
+  "data data frame train percentage rest NULL",
+  expect_error(
+    ml_1_split(
+      data = iris[1:5, ],
+      train = 0.3,
+      seed = 42
+    ),
+    "When `train` and / or `test1` and / or `test2` are supplied as doubles, they must be between 0 and 1 and add up to one.",
+    fixed = TRUE
+  )
+)
 
 test_that("output tibble", expect_equal(
   ml_1_split(iris[1:3, ], c(T, F, F), c(F, T, F), c(F, F, T), output = "tibble"),
@@ -1317,3 +1243,384 @@ test_that("output data.frame", expect_equal(
     row.names = c(NA,-3L)
   )
 ))
+
+test_that("all percentage stratify one column",
+          expect_equal(
+            ml_1_split(
+              data = iris[c(T, F, F, F, F, F, F, F, F, F, F, F, F, F, F), ],
+              train = 0.2,
+              test1 = 0.2,
+              test2 = 0.6,
+              stratify = "Species",
+              seed = 105
+            ),
+            structure(
+              list(
+                .train = structure(
+                  list(
+                    Sepal.Length = c(5.7,
+                                     5.5, 7.6),
+                    Sepal.Width = c(4.4, 2.6, 3),
+                    Petal.Length = c(1.5,
+                                     4.4, 6.6),
+                    Petal.Width = c(0.4, 1.2, 2.1),
+                    Species = structure(
+                      1:3,
+                      .Label = c("setosa",
+                                 "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = c(16L,
+                                91L, 106L),
+                  class = c("tbl_df", "tbl", "data.frame")
+                ),
+                .test1 = structure(
+                  list(
+                    Sepal.Length = 6.6,
+                    Sepal.Width = 3,
+                    Petal.Length = 4.4,
+                    Petal.Width = 1.4,
+                    Species = structure(
+                      2L,
+                      .Label = c("setosa",
+                                 "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = 76L,
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test2 = structure(
+                  list(
+                    Sepal.Length = c(5.1,
+                                     4.8, 4.8, 5, 6.9, 7.7),
+                    Sepal.Width = c(3.5, 3.1, 3, 2, 3.2,
+                                    3),
+                    Petal.Length = c(1.4, 1.6, 1.4, 3.5, 5.7, 6.1),
+                    Petal.Width = c(0.2,
+                                    0.2, 0.3, 1, 2.3, 2.3),
+                    Species = structure(
+                      c(1L, 1L, 1L, 2L,
+                        3L, 3L),
+                      .Label = c("setosa", "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = c(1L,
+                                31L, 46L, 61L, 121L, 136L),
+                  class = c("tbl_df", "tbl", "data.frame")
+                )
+              ),
+              .Names = c(".train", ".test1", ".test2")
+            )
+          ))
+
+
+test_that("percentages 2 stratify one column",
+          expect_equal(
+            ml_1_split(
+              data = iris[c(T, F, F, F, F, F, F, F, F, F, F, F, F, F, F), ],
+              train = 0.2,
+              test1 = 0.8,
+              stratify = "Species",
+              seed = 84
+            ),
+            structure(
+              list(
+                .train = structure(
+                  list(
+                    Sepal.Length = 4.8,
+                    Sepal.Width = 3.1,
+                    Petal.Length = 1.6,
+                    Petal.Width = 0.2,
+                    Species = structure(
+                      1L,
+                      .Label = c("setosa",
+                                 "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = 31L,
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test1 = structure(
+                  list(
+                    Sepal.Length = c(5.1,
+                                     5.7, 4.8, 5, 6.6, 5.5, 7.6, 6.9, 7.7),
+                    Sepal.Width = c(3.5, 4.4,
+                                    3, 2, 3, 2.6, 3, 3.2, 3),
+                    Petal.Length = c(1.4, 1.5, 1.4, 3.5,
+                                     4.4, 4.4, 6.6, 5.7, 6.1),
+                    Petal.Width = c(0.2, 0.4, 0.3, 1, 1.4,
+                                    1.2, 2.1, 2.3, 2.3),
+                    Species = structure(
+                      c(1L, 1L, 1L, 2L, 2L,
+                        2L, 3L, 3L, 3L),
+                      .Label = c("setosa", "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = c(1L,
+                                16L, 46L, 61L, 76L, 91L, 106L, 121L, 136L),
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test2 = structure(
+                  list(
+                    Sepal.Length = numeric(0),
+                    Sepal.Width = numeric(0),
+                    Petal.Length = numeric(0),
+                    Petal.Width = numeric(0),
+                    Species = structure(
+                      integer(0),
+                      .Label = c("setosa", "versicolor",
+                                 "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = integer(0),
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                )
+              ),
+              .Names = c(".train", ".test1", ".test2")
+            )
+          ))
+
+test_that("one percentage stratify one column",
+          expect_equal(
+            ml_1_split(
+              data = iris[c(T, F, F, F, F, F, F, F, F, F, F, F, F, F, F),],
+              train = 1,
+              stratify = "Species",
+              seed = 84
+            ),
+            structure(
+              list(
+                .train = structure(
+                  list(
+                    Sepal.Length = c(5.1,
+                                     5.7, 4.8, 4.8, 5, 6.6, 5.5, 7.6, 6.9, 7.7),
+                    Sepal.Width = c(3.5,
+                                    4.4, 3.1, 3, 2, 3, 2.6, 3, 3.2, 3),
+                    Petal.Length = c(1.4, 1.5,
+                                     1.6, 1.4, 3.5, 4.4, 4.4, 6.6, 5.7, 6.1),
+                    Petal.Width = c(0.2,
+                                    0.4, 0.2, 0.3, 1, 1.4, 1.2, 2.1, 2.3, 2.3),
+                    Species = structure(
+                      c(1L,
+                        1L, 1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L),
+                      .Label = c("setosa", "versicolor",
+                                 "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = c(1L,
+                                16L, 31L, 46L, 61L, 76L, 91L, 106L, 121L, 136L),
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test1 = structure(
+                  list(
+                    Sepal.Length = numeric(0),
+                    Sepal.Width = numeric(0),
+                    Petal.Length = numeric(0),
+                    Petal.Width = numeric(0),
+                    Species = structure(
+                      integer(0),
+                      .Label = c("setosa", "versicolor",
+                                 "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = integer(0),
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test2 = structure(
+                  list(
+                    Sepal.Length = numeric(0),
+                    Sepal.Width = numeric(0),
+                    Petal.Length = numeric(0),
+                    Petal.Width = numeric(0),
+                    Species = structure(
+                      integer(0),
+                      .Label = c("setosa", "versicolor",
+                                 "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = integer(0),
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                )
+              ),
+              .Names = c(".train", ".test1", ".test2")
+            )
+          ))
+
+test_that(
+  "data data frame train percentage NULL rest not one",
+  expect_error(
+    ml::ml_1_split(
+      data = iris,
+      train = NULL,
+      test1 = 0.2,
+      test2 = 0.6
+    ),
+    "When `train` and / or `test1` and / or `test2` are supplied as doubles, they must be between 0 and 1 and add up to one.",
+    fixed = TRUE
+  )
+)
+
+test_that(
+  "data data frame train percentage not NULL rest NULL",
+  expect_equal(
+    ml::ml_1_split(data = iris[c(T, rep(F, 74)),], train = 1.0),
+    structure(
+      list(
+        .train = structure(
+          list(
+            Sepal.Length = c(5.1,
+                             6.6),
+            Sepal.Width = c(3.5, 3),
+            Petal.Length = c(1.4, 4.4),
+            Petal.Width = c(0.2,
+                            1.4),
+            Species = structure(
+              1:2,
+              .Label = c("setosa", "versicolor",
+                         "virginica"),
+              class = "factor"
+            )
+          ),
+          .Names = c(
+            "Sepal.Length",
+            "Sepal.Width",
+            "Petal.Length",
+            "Petal.Width",
+            "Species"
+          ),
+          row.names = c(1L,
+                        76L),
+          class = c("tbl_df", "tbl", "data.frame")
+        ),
+        .test1 = structure(
+          list(
+            Sepal.Length = numeric(0),
+            Sepal.Width = numeric(0),
+            Petal.Length = numeric(0),
+            Petal.Width = numeric(0),
+            Species = structure(
+              integer(0),
+              .Label = c("setosa",
+                         "versicolor", "virginica"),
+              class = "factor"
+            )
+          ),
+          .Names = c(
+            "Sepal.Length",
+            "Sepal.Width",
+            "Petal.Length",
+            "Petal.Width",
+            "Species"
+          ),
+          row.names = integer(0),
+          class = c("tbl_df",
+                    "tbl", "data.frame")
+        ),
+        .test2 = structure(
+          list(
+            Sepal.Length = numeric(0),
+            Sepal.Width = numeric(0),
+            Petal.Length = numeric(0),
+            Petal.Width = numeric(0),
+            Species = structure(
+              integer(0),
+              .Label = c("setosa", "versicolor",
+                         "virginica"),
+              class = "factor"
+            )
+          ),
+          .Names = c(
+            "Sepal.Length",
+            "Sepal.Width",
+            "Petal.Length",
+            "Petal.Width",
+            "Species"
+          ),
+          row.names = integer(0),
+          class = c("tbl_df",
+                    "tbl", "data.frame")
+        )
+      ),
+      .Names = c(".train", ".test1", ".test2")
+    )
+  )
+)
