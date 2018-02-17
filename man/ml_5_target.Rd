@@ -4,7 +4,7 @@
 \alias{ml_5_target}
 \title{Specify a target variable for a machine learning model}
 \usage{
-ml_5_target(data_sets_list, target)
+ml_5_target(data_sets_list, target, output = "list", add = FALSE)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -17,6 +17,14 @@ Alternatively a formula can be supplied, the right hand side elements are
 automaitcally known as .target and a call to \code{ml_target} is not 
 necessary anymore. Typically only one target should be set, but it is possible
 to create many models at once.}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default a new target by iterative calls will overwrite that from
+the first call. If you instead want to add an additional target, set \code{add}
+to \code{TRUE}.}
 }
 \value{
 A list containing the train and test sets as well as a .target

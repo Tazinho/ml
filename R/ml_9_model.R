@@ -24,6 +24,14 @@
 #' @param parallel This option is not implemented yet. It should be possible
 #' to specify the hierarchies of parallelisation.
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new models and parameters by iterative calls will 
+#' overwrite those from the first call. If you instead want to add an additional
+#' model, set \code{add} to \code{TRUE}.
+#' 
 #' @return A list containing the train and test sets as well as a .target
 #' element and other elements prefixed by a dot, if supplied earlier in the
 #' pipeline.
@@ -41,6 +49,8 @@ ml_model <- function(data_sets_list,
                      formula = NULL,
                      hyper_parameters = NULL,
                      grid_search_tries = NULL,
-                     parallel = NULL){
+                     parallel = NULL,
+                     output = "list",
+                     add = FALSE){
   return(data_sets_list)
 }

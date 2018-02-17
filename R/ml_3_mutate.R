@@ -14,6 +14,14 @@
 #' 
 #' @param arrange A column from the data to arrange on. Necessary for example,
 #'  when transformations contain window functions.
+#'  
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new transformations by iterative calls will be added
+#' to those of the first call. If you instead want start new, set \code{add}
+#' to \code{FALSE}.
 #' 
 #' @return A list containing the train and test sets with the new columns
 #' from the transformations.
@@ -28,6 +36,8 @@
 ml_mutate <- function(data_sets_list, 
                       transformations, 
                       group_by = NULL, 
-                      arrange = NULL){
+                      arrange = NULL,
+                      output = "list",
+                      add = TRUE){
   return(data_sets_list)
 }

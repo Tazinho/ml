@@ -8,6 +8,14 @@
 #' will be available soon. It might also be implemented to create own metrics
 #' as functions of predictions and outcome.
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new metrics by iterative calls will overwrite those from
+#' the call. If you instead want to add an additional metric, set \code{add} to
+#'  \code{TRUE}.
+#' 
 #' @return A list containing the train and test sets as well as a .target
 #' element and other elements prefixed by a dot, if supplied earlier in the
 #' pipeline.
@@ -22,7 +30,7 @@
 #'
 #' @export
 #'
-ml_8_metrics <- function(data_sets_list, metrics){
+ml_8_metrics <- function(data_sets_list, metrics, output = "list", add = FALSE){
   data_sets_list[[".metrics"]] <- metrics
   
   return(data_sets_list)

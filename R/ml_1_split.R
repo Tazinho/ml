@@ -21,6 +21,14 @@
 #' the resulting proportions of the supplied columns in the created training and
 #' test sets will be the same.
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new splits by iterative calls will overwrite the first
+#' call. If you instead want to add an additional training-test split, set \code{add}
+#' to \code{TRUE}.
+#' 
 #' @param seed The seed (integer) used to create the random samples, if
 #' \code{train}, \code{test1} and \code{test2} where supplied as percentages.
 #' 
@@ -45,6 +53,8 @@ ml_1_split <- function(data,
                      test1 = NULL, 
                      test2 = NULL, 
                      stratify = NULL,
+                     output = "list",
+                     add = FALSE,
                      seed = NULL){
   train_index <- train
   test1_index <- test1
@@ -58,9 +68,9 @@ ml_1_split <- function(data,
   if(nrow(test1) == 0L){test1 <- NULL}
   if(nrow(test2) == 0L){test2 <- NULL}
   
-  train <- as_tibble(train)
-  test1 <- as_tibble(test1)
-  test2 <- as_tibble(test2)
+  train <- tibble::as_tibble(train)
+  test1 <- tibble::as_tibble(test1)
+  test2 <- tibble::as_tibble(test2)
   
   # return
   return(list(.train = train, .test1 = test1, .test2 = test2))

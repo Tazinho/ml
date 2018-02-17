@@ -11,6 +11,14 @@
 #' necessary anymore. Typically only one target should be set, but it is possible
 #' to create many models at once.
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default a new target by iterative calls will overwrite that from
+#' the first call. If you instead want to add an additional target, set \code{add}
+#' to \code{TRUE}.
+#' 
 #' @return A list containing the train and test sets as well as a .target
 #' element and other elements prefixed by a dot, if supplied earlier in the
 #' pipeline.
@@ -25,7 +33,7 @@
 #'
 #' @export
 #'
-ml_5_target <- function(data_sets_list, target){
+ml_5_target <- function(data_sets_list, target, output = "list", add = FALSE){
   # checks
   
   # prepare output

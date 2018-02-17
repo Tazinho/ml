@@ -17,6 +17,14 @@
 #' @param fixed logical, when set to \code{FALSE}, the cross-validation index 
 #' will be resampled during every different training setting.
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new folds by iterative calls will overwrite the first
+#' call. If you instead want to add an additional folds, set \code{add} to 
+#' \code{TRUE}.
+#' 
 #' @param seed The seed (integer) used to create the random CV folds, if
 #' \code{folds}, was supplied as a length one integer.
 #' 
@@ -38,6 +46,8 @@ ml_2_cv <- function(data_sets_list,
                   folds,
                   stratify = NULL,
                   fixed = TRUE,
+                  output = "list",
+                  add = FALSE,
                   seed = NULL){
   # setup
   n_train <- nrow(data_sets_list[[".train"]])

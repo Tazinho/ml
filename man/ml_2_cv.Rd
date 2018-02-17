@@ -4,7 +4,8 @@
 \alias{ml_2_cv}
 \title{Splitting datasets into folds for cross-validation}
 \usage{
-ml_2_cv(data_sets_list, folds, stratify = NULL, fixed = TRUE, seed = NULL)
+ml_2_cv(data_sets_list, folds, stratify = NULL, fixed = TRUE,
+  output = "list", add = FALSE, seed = NULL)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -23,6 +24,14 @@ indices will be the same.}
 
 \item{fixed}{logical, when set to \code{FALSE}, the cross-validation index 
 will be resampled during every different training setting.}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default new folds by iterative calls will overwrite the first
+call. If you instead want to add an additional folds, set \code{add} to 
+\code{TRUE}.}
 
 \item{seed}{The seed (integer) used to create the random CV folds, if
 \code{folds}, was supplied as a length one integer.}

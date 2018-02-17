@@ -5,7 +5,8 @@
 \title{Specify models and parameters to train, possible on a grid of hyper parameters.}
 \usage{
 ml_model(data_sets_list, model = NULL, parameters = NULL, formula = NULL,
-  hyper_parameters = NULL, grid_search_tries = NULL, parallel = NULL)
+  hyper_parameters = NULL, grid_search_tries = NULL, parallel = NULL,
+  output = "list", add = FALSE)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -31,6 +32,14 @@ regarding rounds.}
 
 \item{parallel}{This option is not implemented yet. It should be possible
 to specify the hierarchies of parallelisation.}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default new models and parameters by iterative calls will 
+overwrite those from the first call. If you instead want to add an additional
+model, set \code{add} to \code{TRUE}.}
 }
 \value{
 A list containing the train and test sets as well as a .target

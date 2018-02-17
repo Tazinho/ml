@@ -4,7 +4,7 @@
 \alias{ml_8_metrics}
 \title{Specify metrics to evaluate within the machine learning experiment}
 \usage{
-ml_8_metrics(data_sets_list, metrics)
+ml_8_metrics(data_sets_list, metrics, output = "list", add = FALSE)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -14,6 +14,14 @@ other dot prefixed elements specified earlier in the pipeline.}
 \item{metrics}{A character containing the metrics. A list of possible metrics
 will be available soon. It might also be implemented to create own metrics
 as functions of predictions and outcome.}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default new metrics by iterative calls will overwrite those from
+the call. If you instead want to add an additional metric, set \code{add} to
+ \code{TRUE}.}
 }
 \value{
 A list containing the train and test sets as well as a .target

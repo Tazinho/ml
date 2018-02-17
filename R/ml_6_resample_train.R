@@ -13,6 +13,14 @@
 #' 
 #' @param replace Logical (default \code{FALSE}). Should sampling be with replacement?
 #' 
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new resamples by iterative calls will overwrite those
+#' from the first call. If you instead want to add an additional resamplings,
+#'  set \code{add} to \code{TRUE}.
+#'
 #' @param seed The seed (integer) used to create the random samples.
 #' 
 #' @return A list containing the train and test sets as well as a .resample_train
@@ -31,7 +39,9 @@
 ml_6_resample_train <- function(data_sets_list,
                                 group_by = NULL,
                                 sample_train = NULL,
-                                replace = FALSE, 
+                                replace = FALSE,
+                                output = "list",
+                                add = FALSE,
                                 seed = NULL){
   return(data_sets_list)
 }

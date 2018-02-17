@@ -5,7 +5,7 @@
 \title{Splitting datasets into training and test sets for machine learning}
 \usage{
 ml_1_split(data, train = NULL, test1 = NULL, test2 = NULL,
-  stratify = NULL, seed = NULL)
+  stratify = NULL, output = "list", add = FALSE, seed = NULL)
 }
 \arguments{
 \item{data}{A data frame}
@@ -28,6 +28,14 @@ It can be supplied in the same way as \code{train} and \code{test1}}
 \code{train}, \code{test1} and \code{test2} are supplied, as percentages, 
 the resulting proportions of the supplied columns in the created training and
 test sets will be the same.}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default new splits by iterative calls will overwrite the first
+call. If you instead want to add an additional training-test split, set \code{add}
+to \code{TRUE}.}
 
 \item{seed}{The seed (integer) used to create the random samples, if
 \code{train}, \code{test1} and \code{test2} where supplied as percentages.}

@@ -5,7 +5,7 @@
 \title{Create samples of test data for varying model validation needs}
 \usage{
 ml_7_resample_test(data_sets_list, group_by = NULL, sample_train = NULL,
-  replace = FALSE, seed = NULL)
+  replace = FALSE, output = "list", add = FALSE, seed = NULL)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -20,6 +20,14 @@ lower hierarchies, to be sampled from.}
 \item{sample_train}{An integer containing the number of samples from each group.}
 
 \item{replace}{Logical (default \code{FALSE}). Should sampling be with replacement?}
+
+\item{output}{A character vector specifying the output type. One can choose between
+list, tibble, data.table and data.frame. Other formats like sparse matrices
+might be implemented in the future.}
+
+\item{add}{Per default new resamples by iterative calls will overwrite those
+from first call. If you instead want to add an additional resampling, set \code{add}
+to \code{TRUE}.}
 
 \item{seed}{The seed (integer) used to create the random samples.}
 }

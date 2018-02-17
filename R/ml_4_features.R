@@ -9,6 +9,14 @@
 #'  right hand side formula can be supplied. when a complete formula is set, 
 #'  the left hand side is automaitcally known as .target and a call to 
 #'  \code{ml_target} is not necessary anymore
+#'  
+#' @param output A character vector specifying the output type. One can choose between
+#' list, tibble, data.table and data.frame. Other formats like sparse matrices
+#' might be implemented in the future.
+#' 
+#' @param add Per default new features by iterative calls will overwrite the first
+#' call. If you instead want to add additional features, set \code{add} to
+#' \code{TRUE}.
 #' 
 #' @return A list containing the train and test sets as well as a .features
 #' element and other elements prefixed by a dot, if supplied earlier in the
@@ -24,7 +32,7 @@
 #'
 #' @export
 #'
-ml_4_features <- function(data_sets_list, features){
+ml_4_features <- function(data_sets_list, features, output = "list", add = FALSE){
   # checks: when not NULL each of train, test1, test2 has to have feature names inside
   
   # prepare outputs
