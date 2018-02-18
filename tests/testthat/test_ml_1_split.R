@@ -85,10 +85,20 @@ test_that("train-test1-test2-logical", {
         row.names = c(3L,
                       6L, 9L),
         class = c("tbl_df", "tbl", "data.frame")
+      ),
+      .set = c(
+        "train",
+        "train",
+        "train",
+        "test1",
+        "test1",
+        "test1",
+        "test2",
+        "test2",
+        "test2"
       )
     ),
-    .Names = c(".train",
-               ".test1", ".test2")
+    .Names = c(".train", ".test1", ".test2", ".set")
   ))
 })
 
@@ -180,10 +190,22 @@ test_that("train-test1-test2-percentage", {
           row.names = c(2L,
                         4L, 5L, 8L, 10L),
           class = c("tbl_df", "tbl", "data.frame")
+        ),
+        .set = c(
+          "train",
+          "train",
+          "test1",
+          "test1",
+          "test1",
+          "test2",
+          "test2",
+          "test2",
+          "test2",
+          "test2"
         )
       ),
       .Names = c(".train",
-                 ".test1", ".test2")
+                 ".test1", ".test2", ".set")
     )
   )
 })
@@ -246,9 +268,11 @@ test_that("no data but train supplied",
                              row.names = integer(0),
                              class = c("tbl_df",
                                        "tbl", "data.frame")
-                           )
+                           ),
+                           .set = c("train", "train", "train")
                          ),
-                         .Names = c(".train", ".test1", ".test2")
+                         .Names = c(".train",
+                                    ".test1", ".test2", ".set")
                        )))
 
 test_that(
@@ -327,9 +351,12 @@ test_that("data NULL but train data frame",
                   row.names = integer(0),
                   class = c("tbl_df",
                             "tbl", "data.frame")
-                )
+                ),
+                .set = c("train", "train", "train", "test1",
+                         "test1", "test1")
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train", ".test1", ".test2",
+                         ".set")
             )
           ))
 
@@ -400,10 +427,12 @@ test_that("data NULL and test2 data frame",
                   row.names = c(NA,
                                 3L),
                   class = c("tbl_df", "tbl", "data.frame")
-                )
+                ),
+                .set = c("train",
+                         "train", "train", "test2", "test2", "test2")
               ),
               .Names = c(".train",
-                         ".test1", ".test2")
+                         ".test1", ".test2", ".set")
             )
           ))
 
@@ -528,9 +557,12 @@ test_that("data NULL training and test sets data frames",
                   row.names = 1:2,
                   class = c("tbl_df",
                             "tbl", "data.frame")
-                )
+                ),
+                .set = c("train", "train", "test1", "test1",
+                         "test2", "test2")
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train", ".test1", ".test2",
+                         ".set")
             )
           ))
 
@@ -615,9 +647,11 @@ test_that("train logical test1 logical test2 logical",
                   row.names = 3L,
                   class = c("tbl_df",
                             "tbl", "data.frame")
-                )
+                ),
+                .set = c("train", "test1", "test2")
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train",
+                         ".test1", ".test2", ".set")
             )
           ))
 
@@ -699,9 +733,11 @@ test_that(
         row.names = integer(0),
         class = c("tbl_df",
                   "tbl", "data.frame")
-      )
+      ),
+      .set = "train"
     ),
-    .Names = c(".train", ".test1", ".test2")
+    .Names = c(".train",
+               ".test1", ".test2", ".set")
   ))
 )
 
@@ -784,9 +820,11 @@ test_that("data data frame train ingeger",
                 row.names = integer(0),
                 class = c("tbl_df",
                           "tbl", "data.frame")
-              )
+              ),
+              .set = c("train", "train", "train")
             ),
-            .Names = c(".train", ".test1", ".test2")
+            .Names = c(".train",
+                       ".test1", ".test2", ".set")
           )))
 
 test_that("data data frame train length one integer",
@@ -866,92 +904,98 @@ test_that("data data frame train length one integer",
                              row.names = integer(0),
                              class = c("tbl_df",
                                        "tbl", "data.frame")
-                           )
+                           ),
+                           .set = c("train", "train")
                          ),
-                         .Names = c(".train", ".test1", ".test2")
+                         .Names = c(".train",
+                                    ".test1", ".test2", ".set")
                        )))
 
 test_that("data data frame rest NULL",
-          expect_equal(ml_1_split(data = iris[1:5,], seed = 42),
-                       structure(
-                         list(
-                           .train = structure(
-                             list(
-                               Sepal.Length = c(5, 4.6,
-                                                5.1),
-                               Sepal.Width = c(3.6, 3.1, 3.5),
-                               Petal.Length = c(1.4, 1.5,
-                                                1.4),
-                               Petal.Width = c(0.2, 0.2, 0.2),
-                               Species = structure(
-                                 c(1L,
-                                   1L, 1L),
-                                 .Label = c("setosa", "versicolor", "virginica"),
-                                 class = "factor"
-                               )
-                             ),
-                             .Names = c(
-                               "Sepal.Length",
-                               "Sepal.Width",
-                               "Petal.Length",
-                               "Petal.Width",
-                               "Species"
-                             ),
-                             row.names = c(5L,
-                                           4L, 1L),
-                             class = c("tbl_df", "tbl", "data.frame")
-                           ),
-                           .test1 = structure(
-                             list(
-                               Sepal.Length = 4.7,
-                               Sepal.Width = 3.2,
-                               Petal.Length = 1.3,
-                               Petal.Width = 0.2,
-                               Species = structure(
-                                 1L,
-                                 .Label = c("setosa",
-                                            "versicolor", "virginica"),
-                                 class = "factor"
-                               )
-                             ),
-                             .Names = c(
-                               "Sepal.Length",
-                               "Sepal.Width",
-                               "Petal.Length",
-                               "Petal.Width",
-                               "Species"
-                             ),
-                             row.names = 3L,
-                             class = c("tbl_df",
-                                       "tbl", "data.frame")
-                           ),
-                           .test2 = structure(
-                             list(
-                               Sepal.Length = 4.9,
-                               Sepal.Width = 3,
-                               Petal.Length = 1.4,
-                               Petal.Width = 0.2,
-                               Species = structure(
-                                 1L,
-                                 .Label = c("setosa",
-                                            "versicolor", "virginica"),
-                                 class = "factor"
-                               )
-                             ),
-                             .Names = c(
-                               "Sepal.Length",
-                               "Sepal.Width",
-                               "Petal.Length",
-                               "Petal.Width",
-                               "Species"
-                             ),
-                             row.names = 2L,
-                             class = c("tbl_df",
-                                       "tbl", "data.frame")
-                           )
-                         ),
-                         .Names = c(".train", ".test1", ".test2")
-                       )))
+          expect_equal(
+            ml_1_split(data = iris[1:5,], seed = 42),
+            structure(
+              list(
+                .train = structure(
+                  list(
+                    Sepal.Length = c(5, 4.6,
+                                     5.1),
+                    Sepal.Width = c(3.6, 3.1, 3.5),
+                    Petal.Length = c(1.4, 1.5,
+                                     1.4),
+                    Petal.Width = c(0.2, 0.2, 0.2),
+                    Species = structure(
+                      c(1L,
+                        1L, 1L),
+                      .Label = c("setosa", "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = c(5L,
+                                4L, 1L),
+                  class = c("tbl_df", "tbl", "data.frame")
+                ),
+                .test1 = structure(
+                  list(
+                    Sepal.Length = 4.7,
+                    Sepal.Width = 3.2,
+                    Petal.Length = 1.3,
+                    Petal.Width = 0.2,
+                    Species = structure(
+                      1L,
+                      .Label = c("setosa",
+                                 "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = 3L,
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .test2 = structure(
+                  list(
+                    Sepal.Length = 4.9,
+                    Sepal.Width = 3,
+                    Petal.Length = 1.4,
+                    Petal.Width = 0.2,
+                    Species = structure(
+                      1L,
+                      .Label = c("setosa",
+                                 "versicolor", "virginica"),
+                      class = "factor"
+                    )
+                  ),
+                  .Names = c(
+                    "Sepal.Length",
+                    "Sepal.Width",
+                    "Petal.Length",
+                    "Petal.Width",
+                    "Species"
+                  ),
+                  row.names = 2L,
+                  class = c("tbl_df",
+                            "tbl", "data.frame")
+                ),
+                .set = c("train", "train", "train", "test1",
+                         "test2")
+              ),
+              .Names = c(".train", ".test1", ".test2", ".set")
+            )
+          ))
 
 test_that(
   "data data frame train probability test1 probability",
@@ -1037,9 +1081,11 @@ test_that(
           row.names = integer(0),
           class = c("tbl_df",
                     "tbl", "data.frame")
-        )
+        ),
+        .set = c("train", "train", "test1")
       ),
-      .Names = c(".train", ".test1", ".test2")
+      .Names = c(".train",
+                 ".test1", ".test2", ".set")
     )
   )
 )
@@ -1129,9 +1175,11 @@ test_that(
           row.names = integer(0),
           class = c("tbl_df",
                     "tbl", "data.frame")
-        )
+        ),
+        .set = c("train", "train", "test1")
       ),
-      .Names = c(".train", ".test1", ".test2")
+      .Names = c(".train",
+                 ".test1", ".test2", ".set")
     )
   )
 )
@@ -1332,9 +1380,22 @@ test_that("all percentage stratify one column",
                   row.names = c(1L,
                                 31L, 46L, 61L, 121L, 136L),
                   class = c("tbl_df", "tbl", "data.frame")
+                ),
+                .set = c(
+                  "train",
+                  "train",
+                  "train",
+                  "test1",
+                  "test2",
+                  "test2",
+                  "test2",
+                  "test2",
+                  "test2",
+                  "test2"
                 )
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train", ".test1",
+                         ".test2", ".set")
             )
           ))
 
@@ -1426,9 +1487,22 @@ test_that("percentages 2 stratify one column",
                   row.names = integer(0),
                   class = c("tbl_df",
                             "tbl", "data.frame")
+                ),
+                .set = c(
+                  "train",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1",
+                  "test1"
                 )
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train",
+                         ".test1", ".test2", ".set")
             )
           ))
 
@@ -1519,16 +1593,29 @@ test_that("one percentage stratify one column",
                   row.names = integer(0),
                   class = c("tbl_df",
                             "tbl", "data.frame")
+                ),
+                .set = c(
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train",
+                  "train"
                 )
               ),
-              .Names = c(".train", ".test1", ".test2")
+              .Names = c(".train",
+                         ".test1", ".test2", ".set")
             )
           ))
 
 test_that(
   "data data frame train percentage NULL rest not one",
   expect_error(
-    ml::ml_1_split(
+    ml_1_split(
       data = iris,
       train = NULL,
       test1 = 0.2,
@@ -1542,19 +1629,19 @@ test_that(
 test_that(
   "data data frame train percentage not NULL rest NULL",
   expect_equal(
-    ml::ml_1_split(data = iris[c(T, rep(F, 74)),], train = 1.0),
+    ml_1_split(data = iris[c(T, rep(F, 74)),], train = 1.0),
     structure(
       list(
         .train = structure(
           list(
-            Sepal.Length = c(5.1,
-                             6.6),
-            Sepal.Width = c(3.5, 3),
-            Petal.Length = c(1.4, 4.4),
-            Petal.Width = c(0.2,
-                            1.4),
+            Sepal.Length = c(6.6,
+                             5.1),
+            Sepal.Width = c(3, 3.5),
+            Petal.Length = c(4.4, 1.4),
+            Petal.Width = c(1.4,
+                            0.2),
             Species = structure(
-              1:2,
+              c(2L, 1L),
               .Label = c("setosa", "versicolor",
                          "virginica"),
               class = "factor"
@@ -1567,8 +1654,8 @@ test_that(
             "Petal.Width",
             "Species"
           ),
-          row.names = c(1L,
-                        76L),
+          row.names = c(76L,
+                        1L),
           class = c("tbl_df", "tbl", "data.frame")
         ),
         .test1 = structure(
@@ -1618,19 +1705,39 @@ test_that(
           row.names = integer(0),
           class = c("tbl_df",
                     "tbl", "data.frame")
-        )
+        ),
+        .set = c("train", "train")
       ),
-      .Names = c(".train", ".test1", ".test2")
+      .Names = c(".train",
+                 ".test1", ".test2", ".set")
     )
   )
 )
 
-test_that("stratify not character",
-          expect_error(ml_1_split(data = iris, train = .5, test1 = .5, stratify = 5),
-          "`stratify` must contain a character with column names.",
-          fixed = TRUE))
+test_that(
+  "stratify not character",
+  expect_error(
+    ml_1_split(
+      data = iris,
+      train = .5,
+      test1 = .5,
+      stratify = 5
+    ),
+    "`stratify` must contain a character with column names.",
+    fixed = TRUE
+  )
+)
 
-test_that("stratify not character",
-          expect_error(ml_1_split(data = iris, train = .5, test1 = .5, stratify = "bla"),
-          "`All elements of `stratify` must be column names of `data`.",
-          fixed = TRUE))
+test_that(
+  "stratify not character",
+  expect_error(
+    ml_1_split(
+      data = iris,
+      train = .5,
+      test1 = .5,
+      stratify = "bla"
+    ),
+    "`All elements of `stratify` must be column names of `data`.",
+    fixed = TRUE
+  )
+)

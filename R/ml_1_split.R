@@ -231,15 +231,19 @@ ml_1_split <- function(data = NULL,
   test1 <- tibble::as_tibble(test1)
   test2 <- tibble::as_tibble(test2)
   
+  .dataset = list(.train = train, .test1 = test1, .test2 = test2,
+                  .set = c(rep("train", nrow(train)), 
+                           rep("test1", nrow(test1)),
+                           rep("test2", nrow(test2))))
+  
   # return
   if(output == "list")
-  return(list(.train = train, .test1 = test1, .test2 = test2))
+
+  return(.dataset)
   
   if(output != "list"){
-    .dataset <- dplyr::bind_rows(train, test1, test2)
-    .dataset[[".set"]] <- c(rep("train", nrow(train)), 
-                            rep("test1", nrow(test1)),
-                            rep("test2", nrow(test2)))
+    .dataset <- dplyr::bind_rows(train, test1, test2) %>% 
+      dplyr::bind_cols(.set = .dataset[[".set"]])
   }
   
   if(output == "tibble"){return(.dataset)}

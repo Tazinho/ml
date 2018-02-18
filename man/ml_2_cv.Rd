@@ -14,22 +14,24 @@ other dot prefixed elements specified earlier in the pipeline.}
 
 \item{folds}{This arguments specifies the folds used for (nested) cross-
 validation. It can be supplied as a length 1 integer containing the number
-of folds that should be sampled (once, if \code{fixed = TRUE}), an integer
-vector, a column from the \code{.train} element within \code{data_sets_list}
-or a data frame with integer columns for nested CV.}
+of folds that should be sampled (once, if \code{fixed = TRUE}), a vector,
+preferably integer (but also double, character or factor are possible), a
+column from the \code{.train} element within \code{data_sets_list}
+or a data frame with integer columns for nested CV. NSE and nested CV are not 
+implemented yet.}
 
-\item{stratify}{The name of one or more columns in \code{.train}., 
+\item{stratify}{Not implemented yet. The name of one or more columns in \code{.train}., 
 the resulting proportions of the supplied columns in the created CV fold
 indices will be the same.}
 
-\item{fixed}{logical, when set to \code{FALSE}, the cross-validation index 
+\item{fixed}{Not implemented yet. Logical, when set to \code{FALSE}, the cross-validation index 
 will be resampled during every different training setting.}
 
 \item{output}{A character vector specifying the output type. One can choose between
 list, tibble, data.table and data.frame. Other formats like sparse matrices
 might be implemented in the future.}
 
-\item{add}{Per default new folds by iterative calls will overwrite the first
+\item{add}{Not implemented yet. Per default new folds by iterative calls will overwrite the first
 call. If you instead want to add an additional folds, set \code{add} to 
 \code{TRUE}.}
 
