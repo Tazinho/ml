@@ -15,13 +15,14 @@ other dot prefixed elements specified earlier in the pipeline.}
 training and test sets within \code{data_sets_list}. Alternatively a 
 right hand side formula can be supplied. when a complete formula is set, 
 the left hand side is automaitcally known as .target and a call to 
-\code{ml_target} is not necessary anymore}
+\code{ml_target} is not necessary anymore. The latter one and NSE support is
+not implemented yet.}
 
 \item{output}{A character vector specifying the output type. One can choose between
 list, tibble, data.table and data.frame. Other formats like sparse matrices
 might be implemented in the future.}
 
-\item{add}{Per default new features by iterative calls will overwrite the first
+\item{add}{Not implemented yet. Per default new features by iterative calls will overwrite the first
 call. If you instead want to add additional features, set \code{add} to
 \code{TRUE}.}
 }

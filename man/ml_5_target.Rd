@@ -16,7 +16,8 @@ must be a column name of training and test sets within \code{data_sets_list}.
 Alternatively a formula can be supplied, the right hand side elements are
 automaitcally known as .target and a call to \code{ml_target} is not 
 necessary anymore. Typically only one target should be set, but it is possible
-to create many models at once.}
+to create many models at once. Currently just one column name supplied as 
+character is implemented.}
 
 \item{output}{A character vector specifying the output type. One can choose between
 list, tibble, data.table and data.frame. Other formats like sparse matrices

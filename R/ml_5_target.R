@@ -9,7 +9,8 @@
 #' Alternatively a formula can be supplied, the right hand side elements are
 #' automaitcally known as .target and a call to \code{ml_target} is not 
 #' necessary anymore. Typically only one target should be set, but it is possible
-#' to create many models at once.
+#' to create many models at once. Currently just one column name supplied as 
+#' character is implemented.
 #' 
 #' @param output A character vector specifying the output type. One can choose between
 #' list, tibble, data.table and data.frame. Other formats like sparse matrices
@@ -34,11 +35,35 @@
 #' @export
 #'
 ml_5_target <- function(data_sets_list, target, output = "list", add = FALSE){
-  # checks
   
-  # prepare output
-  data_sets_list[[".target"]] <- target
+  if(isTRUE(all(target %in% names(data_sets_list[[".train"]])))){
+    data_sets_list[[".target"]] <- target
+  }
   
-  # return
-  return(data_sets_list)
+  # return 
+  if(output == "list"){
+    return(data_sets_list)  
+  }
+  
+  if(output != "list"){
+    .dataset <- dplyr::bind_rows(data_sets_list[[".train"]],
+                                 data_sets_list[[".test1"]],
+                                 data_sets_list[[".test2"]])
+    if(".set" %in% names(data_sets_list)){
+      .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".set"]])
+    }
+    if(".cv_folds" %in% names(data_sets_list)){
+      .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".cv_folds"]])
+    }
+    if(".features" %in% names(data_sets_list)){
+      attr(.dataset, ".features") <- data_sets_list[[".features"]]
+    }
+    
+    attr(.dataset, ".target") <- target
+    
+    if(output == "tibble"){return(.dataset)}
+    if(output == "data.table"){return(data.table::as.data.table(.dataset))}
+    if(output == "data.frame"){return(as.data.frame(.dataset))}
+  }
+  
 }
