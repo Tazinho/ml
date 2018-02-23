@@ -50,15 +50,19 @@ ml_4_features <- function(data_sets_list, features, output = "list", add = FALSE
   }
   
   if(output != "list"){
+    
+    if(".cv_folds" %in% names(data_sets_list)){
+      .dataset[[".train"]] <- dplyr::bind_cols(data_sets_list[[".train"]],
+                                                     .cv_folds = .cv_folds)
+    }
+    
     .dataset <- dplyr::bind_rows(data_sets_list[[".train"]],
                                  data_sets_list[[".test1"]],
                                  data_sets_list[[".test2"]])
     if(".set" %in% names(data_sets_list)){
       .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".set"]])
     }
-    if(".cv_folds" %in% names(data_sets_list)){
-      .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".cv_folds"]])
-    }
+
     if(".features" %in% names(data_sets_list)){
       attr(.dataset, ".features") <- features
     }

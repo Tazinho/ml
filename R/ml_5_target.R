@@ -12,6 +12,12 @@
 #' to create many models at once. Currently just one column name supplied as 
 #' character is implemented.
 #' 
+#' @param pos_class short for positive class, relevant for binary classification
+#' problems. This should be supplied as a character, but may also be supplied as
+#' as integer, or logical, if the target is encoded in this way. If \code{pos_class}
+#' is not supplied, the positive class will be assumed to be the less frequent class
+#' on the whole training set within the \code{ml_model} step.
+#' 
 #' @param output A character vector specifying the output type. One can choose between
 #' list, tibble, data.table and data.frame. Other formats like sparse matrices
 #' might be implemented in the future.
@@ -34,11 +40,13 @@
 #'
 #' @export
 #'
-ml_5_target <- function(data_sets_list, target, output = "list", add = FALSE){
+ml_5_target <- function(data_sets_list, target, pos_class = NULL, output = "list", add = FALSE){
   
   if(isTRUE(all(target %in% names(data_sets_list[[".train"]])))){
     data_sets_list[[".target"]] <- target
   }
+  
+  if(!is.null(pos_class)){data_sets_list[[".pos_class"]] <- pos_class}
   
   # return 
   if(output == "list"){
@@ -46,17 +54,22 @@ ml_5_target <- function(data_sets_list, target, output = "list", add = FALSE){
   }
   
   if(output != "list"){
+    
+    if(".cv_folds" %in% names(data_sets_list)){
+      data_sets_list[[".train"]] <- dplyr::bind_cols(data_sets_list[[".train"]],
+                                               .cv_folds = data_sets_list[[".cv_folds"]])
+    }
     .dataset <- dplyr::bind_rows(data_sets_list[[".train"]],
                                  data_sets_list[[".test1"]],
                                  data_sets_list[[".test2"]])
     if(".set" %in% names(data_sets_list)){
       .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".set"]])
     }
-    if(".cv_folds" %in% names(data_sets_list)){
-      .dataset <- dplyr::bind_cols(.dataset, .set = data_sets_list[[".cv_folds"]])
-    }
     if(".features" %in% names(data_sets_list)){
       attr(.dataset, ".features") <- data_sets_list[[".features"]]
+    }
+    if(!is.null(data_sets_list[[".pos_class"]])){
+      attr(.dataset, ".pos_class") <- data_sets_list[[".pos_class"]]
     }
     
     attr(.dataset, ".target") <- target

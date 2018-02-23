@@ -4,7 +4,8 @@
 \alias{ml_5_target}
 \title{Specify a target variable for a machine learning model}
 \usage{
-ml_5_target(data_sets_list, target, output = "list", add = FALSE)
+ml_5_target(data_sets_list, target, pos_class = NULL, output = "list",
+  add = FALSE)
 }
 \arguments{
 \item{data_sets_list}{A list containing at least one data frame \code{.train}
@@ -18,6 +19,12 @@ automaitcally known as .target and a call to \code{ml_target} is not
 necessary anymore. Typically only one target should be set, but it is possible
 to create many models at once. Currently just one column name supplied as 
 character is implemented.}
+
+\item{pos_class}{short for positive class, relevant for binary classification
+problems. This should be supplied as a character, but may also be supplied as
+as integer, or logical, if the target is encoded in this way. If \code{pos_class}
+is not supplied, the positive class will be assumed to be the less frequent class
+on the whole training set within the \code{ml_model} step.}
 
 \item{output}{A character vector specifying the output type. One can choose between
 list, tibble, data.table and data.frame. Other formats like sparse matrices
